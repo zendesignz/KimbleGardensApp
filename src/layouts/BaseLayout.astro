@@ -15,7 +15,8 @@ const currentPath = Astro.url.pathname;
     <div class="app-shell">
       <header class="header">
         <div class="logo-wrap">
-          <div class="logo-badge" aria-hidden="true">🐦</div>
+          <img class="logo-image" src="/logo.png" alt="Kimble Gardens logo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+          <div class="logo-badge" aria-hidden="true" style="display:none;">🐦</div>
           <div>
             <h1 class="brand-title">Kimble Gardens</h1>
             <div class="small">Internal Operations App</div>

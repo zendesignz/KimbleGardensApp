@@ -5,9 +5,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title="Clients | Kimble Gardens">
   <section class="card">
     <h2>Clients</h2>
-    <p class="small">Scroll through client subtabs, then review progress notes.</p>
+    <p class="small">Pick a client tab, edit details, then save.</p>
     <div class="scroll-tabs" id="client-tabs"></div>
-    <article class="card" id="client-details" style="margin-top:1rem;"></article>
+    <article class="card" style="margin-top:1rem;">
+      <div id="client-summary"></div>
+      <form id="client-form" class="form-grid" style="margin-top:1rem;">
+        <label class="field"><span>Client name</span><input name="name" required /></label>
+        <label class="field"><span>Batch prefix / ID</span><input name="id" required /></label>
+        <label class="field"><span>Contact</span><input name="contact" /></label>
+        <label class="field" style="grid-column:1/-1;"><span>Progress bullets (one per line)</span><textarea name="notes"></textarea></label>
+      </form>
+      <div class="actions">
+        <button id="save-client" class="kg-button" type="button">Save Client</button>
+        <button id="new-client" class="kg-button secondary" type="button">Add New Client</button>
+      </div>
+    </article>
   </section>
 
   <script>
@@ -18,45 +30,68 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       { id: 'C-003', name: 'Pine Family', contact: 'pinefamily@example.com', notes: ['Container herbs project', 'Delivery planned in 3 weeks'] }
     ];
 
-    const store = localStorage.getItem(key);
-    const clients = store ? JSON.parse(store) : defaultClients;
-    if (!store) localStorage.setItem(key, JSON.stringify(defaultClients));
+    const saved = localStorage.getItem(key);
+    const clients = saved ? JSON.parse(saved) : defaultClients;
+    if (!saved) localStorage.setItem(key, JSON.stringify(defaultClients));
 
     const tabsEl = document.querySelector('#client-tabs');
-    const detailsEl = document.querySelector('#client-details');
-    let activeId = clients[0]?.id;
+    const summaryEl = document.querySelector('#client-summary');
+    const form = document.querySelector('#client-form');
+    const saveBtn = document.querySelector('#save-client');
+    const newBtn = document.querySelector('#new-client');
+    let activeIndex = 0;
 
-    const renderDetails = () => {
-      const client = clients.find((c) => c.id === activeId);
-      if (!client || !detailsEl) return;
-      detailsEl.innerHTML = `
-        <h3>${client.name}</h3>
-        <p><strong>Batch Prefix:</strong> ${client.id}</p>
-        <p><strong>Contact:</strong> ${client.contact}</p>
-        <p><strong>Progress bullets:</strong></p>
-        <ul>${client.notes.map((n) => `<li>${n}</li>`).join('')}</ul>
-        <button class="kg-button" type="button">Edit Client Section</button>
-      `;
+    const saveStore = () => localStorage.setItem(key, JSON.stringify(clients));
+
+    const fillForm = () => {
+      const client = clients[activeIndex];
+      if (!client || !form || !summaryEl) return;
+      form.name.value = client.name;
+      form.id.value = client.id;
+      form.contact.value = client.contact || '';
+      form.notes.value = (client.notes || []).join('\n');
+      summaryEl.innerHTML = `<h3>${client.name}</h3><span class="pill">${client.id}</span>`;
     };
 
     const renderTabs = () => {
       if (!tabsEl) return;
       tabsEl.innerHTML = '';
-      clients.forEach((client) => {
+      clients.forEach((client, index) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.textContent = client.name;
-        if (client.id === activeId) btn.classList.add('active');
+        if (index === activeIndex) btn.classList.add('active');
         btn.addEventListener('click', () => {
-          activeId = client.id;
+          activeIndex = index;
           renderTabs();
-          renderDetails();
+          fillForm();
         });
         tabsEl.appendChild(btn);
       });
     };
 
+    saveBtn?.addEventListener('click', () => {
+      const current = clients[activeIndex];
+      if (!current || !form) return;
+      current.name = form.name.value.trim();
+      current.id = form.id.value.trim();
+      current.contact = form.contact.value.trim();
+      current.notes = form.notes.value.split('\n').map((n) => n.trim()).filter(Boolean);
+      saveStore();
+      renderTabs();
+      fillForm();
+      alert('Client saved.');
+    });
+
+    newBtn?.addEventListener('click', () => {
+      clients.push({ id: `C-00${clients.length + 1}`, name: 'New Client', contact: '', notes: ['Add progress update here'] });
+      activeIndex = clients.length - 1;
+      saveStore();
+      renderTabs();
+      fillForm();
+    });
+
     renderTabs();
-    renderDetails();
+    fillForm();
   </script>
 </BaseLayout>

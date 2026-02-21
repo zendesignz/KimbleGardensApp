@@ -1,31 +1,37 @@
 # Kimble Gardens - Internal Operations App
 
-An Astro-based internal app scaffold for managing clients, plant records, services, media, and settings for Kimble Gardens.
+An Astro internal app starter for Kimble Gardens to manage clients, plant records, services, media, and settings.
 
-## What is included
-- Top navigation tabs: Dashboard, Clients, Plant Records, Services, Media, Settings.
-- Local-first data persistence using `localStorage`.
-- Seed demo data for Clients and Plant Records so screens are populated on first run.
-- Basic tab/page scaffolding ready for iterative UX updates.
+## Current features
+- Tabs: Dashboard, Clients, Plant Records, Services, Media, Settings.
+- Active tab highlight so the current page is obvious.
+- Local `localStorage` persistence for Clients, Plant Records, and Services.
+- Seed demo data included so pages are populated on first run.
+- Editable forms for client records, plant records, and service names.
+
+## Add your logo
+1. Save your logo file in this project at:
+   - `public/logo.png`
+2. Refresh the app in your browser.
 
 ## Windows setup
-1. Open **PowerShell** in this project folder.
+1. Open **PowerShell** in the project folder.
 2. Install dependencies:
    ```powershell
    npm install
    ```
-3. Start local development server:
+3. Start the app:
    ```powershell
    npm run dev
    ```
-4. Open the local URL shown in terminal (expected default):
+4. Open:
    - `http://localhost:4321`
 
 ## Scripts
-- `npm run dev` - Start Astro dev server.
-- `npm run build` - Build production output.
-- `npm run preview` - Preview production build locally.
+- `npm run dev` - run development server
+- `npm run build` - build production output
+- `npm run preview` - preview production build
 
 ## Notes
-- This app currently uses browser `localStorage` only (no backend/database).
-- `node_modules` should not be committed.
+- No backend yet (data is browser local only).
+- `node_modules` is ignored and should never be committed.

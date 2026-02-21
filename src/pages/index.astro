@@ -14,8 +14,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </article>
     <article class="card">
       <h2>Quick Actions</h2>
-      <button class="kg-button" type="button">Add Plant Record</button>
-      <button class="kg-button" type="button" style="margin-left:0.5rem;background:white;color:var(--kg-green);">Add Client</button>
+      <div class="actions">
+        <a class="kg-button" href="/plant-records">Open Plant Records</a>
+        <a class="kg-button secondary" href="/clients">Open Clients</a>
+      </div>
+      <p class="small">Tip: Add your real logo file as <code>public/logo.png</code>.</p>
     </article>
   </section>
 </BaseLayout>

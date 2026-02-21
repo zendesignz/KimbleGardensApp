@@ -1,32 +1,81 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const services = [
-  'Garden Maintenance',
-  'Pruning',
-  'Spring Opening',
-  'Fall Closure',
-  'Fertilizer',
-  'Weeding',
-  'Landscaping',
-  'Garden Design'
-];
 ---
 
 <BaseLayout title="Services | Kimble Gardens">
   <section class="card">
     <h2>Services</h2>
-    <p class="small">This tab replaces roadmap and can be expanded as your business grows.</p>
-    <div class="grid">
-      {
-        services.map((service) => (
-          <article class="card">
-            <h3>{service}</h3>
-            <p class="small">Service details can be edited as internal workflows evolve.</p>
-            <button class="kg-button" type="button">Edit Service</button>
-          </article>
-        ))
-      }
+    <p class="small">Roadmap has been replaced with Services. Add or edit offerings here.</p>
+    <div id="service-list" class="grid"></div>
+    <div class="actions">
+      <button id="add-service" class="kg-button" type="button">Add Service</button>
     </div>
   </section>
+
+  <script>
+    const key = 'kg-services';
+    const defaults = [
+      'Garden Maintenance',
+      'Pruning',
+      'Spring Opening',
+      'Fall Closure',
+      'Fertilizer',
+      'Weeding',
+      'Landscaping',
+      'Garden Design'
+    ];
+
+    const saved = localStorage.getItem(key);
+    const services = saved ? JSON.parse(saved) : defaults;
+    if (!saved) localStorage.setItem(key, JSON.stringify(defaults));
+
+    const listEl = document.querySelector('#service-list');
+    const addBtn = document.querySelector('#add-service');
+
+    const persist = () => localStorage.setItem(key, JSON.stringify(services));
+
+    const render = () => {
+      if (!listEl) return;
+      listEl.innerHTML = services
+        .map(
+          (service, index) => `
+            <article class="card">
+              <label class="field">
+                <span>Service ${index + 1}</span>
+                <input data-index="${index}" value="${service}" />
+              </label>
+              <div class="actions">
+                <button class="kg-button secondary" data-remove="${index}" type="button">Remove</button>
+              </div>
+            </article>
+          `
+        )
+        .join('');
+
+      listEl.querySelectorAll('input[data-index]').forEach((input) => {
+        input.addEventListener('change', (event) => {
+          const idx = Number(event.target.getAttribute('data-index'));
+          services[idx] = event.target.value.trim() || services[idx];
+          persist();
+        });
+      });
+
+      listEl.querySelectorAll('button[data-remove]').forEach((btn) => {
+        btn.addEventListener('click', (event) => {
+          const idx = Number(event.target.getAttribute('data-remove'));
+          services.splice(idx, 1);
+          persist();
+          render();
+        });
+      });
+    };
+
+    addBtn?.addEventListener('click', () => {
+      services.push('New Service');
+      persist();
+      render();
+    });
+
+    render();
+  </script>
 </BaseLayout>
