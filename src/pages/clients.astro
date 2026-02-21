@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Clients | Kimble Gardens">
+  <section class="card">
+    <h2>Clients</h2>
+    <p class="small">Scroll through client subtabs, then review progress notes.</p>
+    <div class="scroll-tabs" id="client-tabs"></div>
+    <article class="card" id="client-details" style="margin-top:1rem;"></article>
+  </section>
+
+  <script>
+    const key = 'kg-clients';
+    const defaultClients = [
+      { id: 'C-001', name: 'Avery Home', contact: 'avery@example.com', notes: ['Needs shade plants near patio', 'Weekly picture updates requested'] },
+      { id: 'C-002', name: 'Maple Dental', contact: 'office@mapledental.com', notes: ['Front bed redesign', 'Spring opening scheduled'] },
+      { id: 'C-003', name: 'Pine Family', contact: 'pinefamily@example.com', notes: ['Container herbs project', 'Delivery planned in 3 weeks'] }
+    ];
+
+    const store = localStorage.getItem(key);
+    const clients = store ? JSON.parse(store) : defaultClients;
+    if (!store) localStorage.setItem(key, JSON.stringify(defaultClients));
+
+    const tabsEl = document.querySelector('#client-tabs');
+    const detailsEl = document.querySelector('#client-details');
+    let activeId = clients[0]?.id;
+
+    const renderDetails = () => {
+      const client = clients.find((c) => c.id === activeId);
+      if (!client || !detailsEl) return;
+      detailsEl.innerHTML = `
+        <h3>${client.name}</h3>
+        <p><strong>Batch Prefix:</strong> ${client.id}</p>
+        <p><strong>Contact:</strong> ${client.contact}</p>
+        <p><strong>Progress bullets:</strong></p>
+        <ul>${client.notes.map((n) => `<li>${n}</li>`).join('')}</ul>
+        <button class="kg-button" type="button">Edit Client Section</button>
+      `;
+    };
+
+    const renderTabs = () => {
+      if (!tabsEl) return;
+      tabsEl.innerHTML = '';
+      clients.forEach((client) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = client.name;
+        if (client.id === activeId) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+          activeId = client.id;
+          renderTabs();
+          renderDetails();
+        });
+        tabsEl.appendChild(btn);
+      });
+    };
+
+    renderTabs();
+    renderDetails();
+  </script>
+</BaseLayout>

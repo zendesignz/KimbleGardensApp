@@ -1,0 +1,19 @@
+---
+const { currentPath } = Astro.props;
+const tabs = [
+  { href: '/', label: 'Dashboard' },
+  { href: '/clients', label: 'Clients' },
+  { href: '/plant-records', label: 'Plant Records' },
+  { href: '/services', label: 'Services' },
+  { href: '/media', label: 'Media' },
+  { href: '/settings', label: 'Settings' }
+];
+---
+
+<nav class="nav-tabs" aria-label="Primary">
+  {
+    tabs.map((tab) => (
+      <a href={tab.href} class={currentPath === tab.href ? 'active' : ''}>{tab.label}</a>
+    ))
+  }
+</nav>

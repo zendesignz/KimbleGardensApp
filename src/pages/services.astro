@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = [
+  'Garden Maintenance',
+  'Pruning',
+  'Spring Opening',
+  'Fall Closure',
+  'Fertilizer',
+  'Weeding',
+  'Landscaping',
+  'Garden Design'
+];
+---
+
+<BaseLayout title="Services | Kimble Gardens">
+  <section class="card">
+    <h2>Services</h2>
+    <p class="small">This tab replaces roadmap and can be expanded as your business grows.</p>
+    <div class="grid">
+      {
+        services.map((service) => (
+          <article class="card">
+            <h3>{service}</h3>
+            <p class="small">Service details can be edited as internal workflows evolve.</p>
+            <button class="kg-button" type="button">Edit Service</button>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

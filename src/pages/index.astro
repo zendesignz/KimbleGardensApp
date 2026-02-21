@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Dashboard | Kimble Gardens">
+  <section class="grid">
+    <article class="card">
+      <h2>Today at a Glance</h2>
+      <ul class="clean">
+        <li>Check watering statuses for active batches.</li>
+        <li>Review upcoming client deliveries.</li>
+        <li>Upload media updates for clients.</li>
+      </ul>
+    </article>
+    <article class="card">
+      <h2>Quick Actions</h2>
+      <button class="kg-button" type="button">Add Plant Record</button>
+      <button class="kg-button" type="button" style="margin-left:0.5rem;background:white;color:var(--kg-green);">Add Client</button>
+    </article>
+  </section>
+</BaseLayout>

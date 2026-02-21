@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Plant Records | Kimble Gardens">
+  <section class="card">
+    <h2>Plant Records</h2>
+    <p class="small">Tracks batch ID, stage, watering, delivery, notes, and photos.</p>
+    <div id="records"></div>
+  </section>
+
+  <script>
+    const key = 'kg-plant-records';
+    const defaultRecords = [
+      {
+        batchId: 'C-001-TOM-01',
+        planted: '2026-02-01',
+        pottingStage: 'Seedling trays',
+        wateringStatus: 'Moist - checked today',
+        toBeDelivered: '2026-03-10',
+        notes: 'Strong germination. No disease signs.',
+        photos: ['seedling-tray-01.jpg']
+      },
+      {
+        batchId: 'C-002-LAV-01',
+        planted: '2026-01-24',
+        pottingStage: '4-inch pots',
+        wateringStatus: 'Water tomorrow morning',
+        toBeDelivered: 'N/A',
+        notes: 'Pruned lightly. Fertilizer added.',
+        photos: ['lavender-potting-01.jpg']
+      }
+    ];
+
+    const store = localStorage.getItem(key);
+    const records = store ? JSON.parse(store) : defaultRecords;
+    if (!store) localStorage.setItem(key, JSON.stringify(defaultRecords));
+
+    const recordsEl = document.querySelector('#records');
+    if (recordsEl) {
+      recordsEl.innerHTML = records
+        .map(
+          (r) => `
+            <article class="card" style="margin-top:0.75rem;">
+              <h3>${r.batchId}</h3>
+              <ul class="clean">
+                <li><strong>Planted:</strong> ${r.planted}</li>
+                <li><strong>Potting stage:</strong> ${r.pottingStage}</li>
+                <li><strong>Watering status:</strong> ${r.wateringStatus}</li>
+                <li><strong>To be delivered:</strong> ${r.toBeDelivered}</li>
+                <li><strong>Notes:</strong> ${r.notes}</li>
+                <li><strong>Photos:</strong> ${r.photos.join(', ')}</li>
+              </ul>
+              <button class="kg-button" type="button" style="margin-top:0.5rem;">Edit Record</button>
+            </article>
+          `
+        )
+        .join('');
+    }
+  </script>
+</BaseLayout>

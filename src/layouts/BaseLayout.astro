@@ -1,0 +1,31 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+const { title = 'Kimble Gardens' } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="header">
+        <div class="logo-wrap">
+          <div class="logo-badge" aria-hidden="true">🐦</div>
+          <div>
+            <h1 class="brand-title">Kimble Gardens</h1>
+            <div class="small">Internal Operations App</div>
+          </div>
+        </div>
+      </header>
+      <Nav currentPath={currentPath} />
+      <main>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
